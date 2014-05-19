@@ -95,6 +95,9 @@ small {
 }
 .leaflet-popup-content {
   font-size: 1.4em;
+  a {
+    color: $link_colour !important;
+  }
 }
 
 .mapicon {
