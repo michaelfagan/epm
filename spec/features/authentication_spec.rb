@@ -21,7 +21,7 @@ describe "Authentication" do
     visit new_user_registration_path
     click_button 'Sign up'
     expect(current_path).to eq user_registration_path
-    expect(page).to have_content 'error'
+    expect(page).to have_content 'Problem'
   end
 
   it "logs in a user" do
@@ -59,7 +59,7 @@ describe "Authentication" do
     click_link 'Forgot your password?'
     fill_in 'E-mail', with: Faker::Internet.email
     expect { click_button 'Send' }.not_to change{ActionMailer::Base.deliveries.size}
-    expect(page).to have_content 'error'
+    expect(page).to have_content 'Problem'
   end
 
   it "resends a confirmation email upon request" do
@@ -78,7 +78,7 @@ describe "Authentication" do
     click_link "Didn't receive confirmation instructions?"
     fill_in 'E-mail', with: Faker::Internet.email
     expect { click_button 'Resend' }.not_to change{ActionMailer::Base.deliveries.size}
-    expect(page).to have_content 'error'
+    expect(page).to have_content 'Problem'
   end
 
   context "when logged in" do
