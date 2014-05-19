@@ -206,6 +206,7 @@ class Event < ActiveRecord::Base
   end
 
   def to_ical(host = nil)
+    # todo: upgrade to latest icalendar gem
     vevent = Icalendar::Event.new
     vevent.klass = 'PRIVATE'
     vevent.url = Rails.application.routes.url_helpers.event_url(self, host: host) unless host.nil?

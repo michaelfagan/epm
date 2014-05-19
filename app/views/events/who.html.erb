@@ -40,14 +40,14 @@
 <% end %>
 
 <%# no need to tell coordinators they're attending, as they are listed already, right after this %>
-<%= render('rsvp') unless @event.coordinator == current_user %>
+<%= render('rsvp') unless (@event.coordinator == current_user) || @event.cancelled? %>
 
 <% if @show_invites || @inviting %>
   <section>
     <h2>Invitations</h2>
 
     <% if @num_invited > 0 %>
-      <p><%= pluralize @num_invited, 'invitation' %> <%= 'is'.pluralize(@num_invited) %> awaiting a response.</p>
+      <p><%= pluralize @num_invited, 'invitation' %> <%= 'is'.pluralize(@num_invited) %> awaiting a response (<%= Invitation.where(event_id: @event.id).count %> unsent).</p>
     <% end %>
     <% if @num_declined > 0 %>
       <p><%= pluralize @num_declined, 'invitation' %> <%= 'was'.pluralize(@num_declined) %> declined.</p>

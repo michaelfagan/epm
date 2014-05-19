@@ -26,7 +26,7 @@
 
 <% end %>
 
-<%= render 'rsvp' %>
+<%= render 'rsvp' unless @event.cancelled? %>
 
 <%# this section is largely the same as in events_controller.rb, who method %>
 <% if @event.start && @event.time_until > 1.day && can?(:invite, @event) && @event.invitable? %>
