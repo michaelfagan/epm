@@ -3,8 +3,7 @@
 ## Deploying
 Things to modify
 * Gemfile :production group
-* config/database.yml production
-* config/environments/production.rb , the mailer config options
+* config/application-sample.yml (see that file for details)
 Run cron jobs
 * Run `whenever -w` to create the cron file
 * For Heroku, instead use https://addons.heroku.com/marketplace/scheduler ; tasks are listed in `config/schedule.rb`

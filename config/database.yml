@@ -1,15 +1,16 @@
 development:
-  adapter: postgresql
-  database: epm_development
-  host: localhost
+  adapter: <%= ENV['db_adapter'] %>
+  database: <%= ENV['db_name'] %>
+  host: <%= ENV['db_host'] %>
 
 test:
-  adapter: postgresql
-  database: epm_test
-  host: localhost
+  adapter: <%= ENV['db_adapter'] %>
+  database: <%= ENV['db_name'] %>
+  host: <%= ENV['db_host'] %>
 
 production:
-  adapter: postgresql
-  # adapter: mysql2
-  database: epm_production
-  host: localhost
+  adapter: <%= ENV['db_adapter'] %>
+  database: <%= ENV['db_name'] %>
+  username: <%= ENV['db_username'] %>
+  password: <%= ENV['db_password'] %>
+  host: <%= ENV['db_host'] %>

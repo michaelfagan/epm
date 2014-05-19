@@ -12,6 +12,10 @@ gem 'jquery-ui-rails'
 gem 'devise'
 gem 'cancancan'
 
+# config
+gem 'figaro' # secrets
+gem 'configurable_engine' # editable within app
+
 # geo stuff
 gem 'geokit-rails'
 gem 'geokit-nominatim'
@@ -24,7 +28,6 @@ gem 'kaminari' # pagination
 
 # misc gems
 gem 'strip_attributes' # clean form input
-gem 'configurable_engine' # site-wide config
 gem 'icalendar' # export
 gem 'whenever', :require => false # cron
 

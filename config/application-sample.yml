@@ -1,0 +1,24 @@
+# rename or copy this file to application.yml and (obviously) modify as needed
+
+development:
+  db_adapter: postgresql
+  db_name: epm_development
+  db_host: localhost
+
+test:
+  db_adapter: postgresql
+  db_name: epm_test
+  db_host: localhost
+
+production:
+  db_adapter: postgresql # mysql2
+  db_name: epm_production
+  db_username: 
+  db_password: 
+  db_host: 
+  smtp_address: 
+  smtp_domain: 
+  smtp_user_name: 
+  smtp_password: 
+  smtp_openssl_verify_mode: none
+  app_host: example.com
