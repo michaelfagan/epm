@@ -25,7 +25,5 @@ en:
       user:
         phone: Phone Number
         email: E-mail Address
-        name: Full Name
-        handle: Name or Alias
       event:
         start_time_12: Start time

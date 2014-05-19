@@ -4,41 +4,31 @@
 
   <%= start_cols %>
 
-  <h2>Private Information</h2>
-  <p style="margin-top:0">Shown only to <%= Configurable.admin.pluralize.titlecase %>.</p>
-
   <div class="field">
-    <%= f.label :name %> <span class="hint">to greet you in emails</span><br>
+    <%= f.label :name %> <span class="hint">public</span><br>
     <%= f.text_field :name %>
   </div>
 
   <div class="field">
     <%= f.label :email %>
-    <span class="hint">to send notifications</span><br>
+    <span class="hint">to send notifications; shown only to <%= Configurable.admin.pluralize.titlecase %></span><br>
     <%= f.email_field :email %>
   </div>
 
   <div class="field">
-    <%= f.label :phone %><br>
+    <%= f.label :phone %>
+    <span class="hint">shown only to <%= Configurable.admin.pluralize.titlecase %></span><br>
     <%= f.phone_field :phone %>
   </div>
 
-  <%= render 'shared/address_form', f: f, hint: "to invite you to nearby events; not even shown to #{Configurable.admin.pluralize.titlecase}".html_safe %>
+  <div class="field">
+    <%= f.label :description %> <span class="hint">public; anything you want to say</span><br>
+    <%= f.text_area :description %>
+  </div>
 
   <%= next_col %>
 
-  <h2>Public Information</h2>
-  <p></p>
-
-  <div class="field">
-    <%= f.label :handle %> <span class="hint">how your name will appear to others</span><br>
-    <%= f.text_field :handle %>
-  </div>
-
-  <div class="field">
-    <%= f.label :description %> <span class="hint">anything you want to say</span><br>
-    <%= f.text_area :description %>
-  </div>
+  <%= render 'shared/address_form', f: f, hint: "to invite you to nearby events; not shown to anyone" %>
 
   <%= end_cols %>
 

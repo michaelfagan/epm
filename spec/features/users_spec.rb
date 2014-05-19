@@ -110,7 +110,7 @@ describe "Users" do
       click_link 'Edit'
       expect(current_path).to eq edit_user_path @participant
       new_name = 'John Smith'
-      fill_in 'Full Name', with: new_name
+      fill_in 'Name', with: new_name
       click_button 'Save'
       expect(current_path).to eq user_path @participant
       expect(page).to have_content new_name
@@ -128,7 +128,7 @@ describe "Users" do
     it "cancels editing one's profile" do
       visit user_path @participant
       click_link 'Edit'
-      fill_in 'Full Name', with: 'new name'
+      fill_in 'Name', with: 'new name'
       click_button 'Cancel'
       expect(current_path).to eq user_path @participant
       expect(page).not_to have_content 'new name'

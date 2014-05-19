@@ -61,24 +61,19 @@ describe User do
 
     end
 
-    context "names" do
+    context "name" do
 
       it "has a non-blank display name" do
         expect(build(:user).display_name).not_to be_blank
       end
 
-      it "generates a name and alias based on email" do
+      it "generates a name based on email" do
         u = create :user, name: nil, email: 'joe.smith@example.com'
         expect(u.name).to eq 'Joe Smith'
-        expect(u.handle).to eq 'Joe Smith'
       end
 
       it "does not generate a name when one is given" do
         expect(create(:user, name: 'My Name', email: 'joe.smith@example.com').name).to eq 'My Name'
-      end
-
-      it "does not generate an alias when one is given" do
-        expect(create(:user, handle: 'My Name', email: 'joe.smith@example.com').handle).to eq 'My Name'
       end
 
     end
@@ -193,16 +188,13 @@ describe User do
       u1 = create :user, name: 'Joe Smith', email: 'joe_smith@example.com'
       u2 = create :user, name: 'Sally', email: 'sally_smith@example.com'
       u3 = create :user, name: 'Bob Dole', email: 'blabla@example.com'
-      u4 = create :user, name: 'Bobby Whatever', email: 'whatever@example.com', handle: 'Blacksmith'
-      smiths = User.search 'smith' # checks that it looks in name, handle, and email fields
-      expect(smiths.length).to eq 3
+      smiths = User.search 'smith' # checks that it looks in name and email fields
+      expect(smiths.length).to eq 2
       expect(smiths).to include u1
       expect(smiths).to include u2
-      expect(smiths).to include u4
       bobs = User.search 'bob' # checks for case sensitivity
-      expect(bobs.length).to eq 2
+      expect(bobs.length).to eq 1
       expect(bobs).to include u3
-      expect(bobs).to include u4
       expect(User.search('Jack').length).to eq 0
     end
 

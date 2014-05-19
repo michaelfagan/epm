@@ -29,7 +29,6 @@ FactoryGirl.define do
     factory :full_user do
       name { Faker::Name.name }
       email { Faker::Internet.free_email(name) }
-      handle { Faker::Internet.user_name(name) }
       description { Faker::Lorem.sentences(rand 1..5).join(' ') }
       phone { Faker::PhoneNumber.phone_number }
       address { "#{Faker::Address.street_address}\n#{Faker::Address.city}, #{Faker::Address.country}" }

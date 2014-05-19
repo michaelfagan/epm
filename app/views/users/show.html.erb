@@ -53,7 +53,6 @@
 <% if can? :read_contact, @user %>
   <div>
     <h2>Contact Information</h2>
-    <%= @user.name if @user.name %>
     <p><%= mail_to @user.email %></p>
     <% if @user.phone %>
       <%= link_to @user.phone, "tel:#{@user.phone}" %>

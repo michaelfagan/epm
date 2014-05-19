@@ -9,7 +9,7 @@ namespace :db do
 
     # probability that a record would have a particular attribute
     event_attribute_probabilities = {name: 80, description: 30, notes: 10, address: 40, lat: 90}
-    user_attribute_probabilities = {name: 90, handle: 90, description: 10, phone: 40, address: 60, lat: 90}
+    user_attribute_probabilities = {name: 90, description: 10, phone: 40, address: 60, lat: 90}
     def use_probabilities(record, attr_prob)
       attr_prob.each do |k, prob|
         record.send("#{k}=", nil) if (rand * 100) > prob

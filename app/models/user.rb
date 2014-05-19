@@ -4,19 +4,17 @@ class User < ActiveRecord::Base
 
   strip_attributes
   before_create do |user|
-    if user.email.present? && user.email.include?('@')
-      autoname = user.email.split('@').first.gsub(/\.|-|_/, ' ').titlecase
-      user.name = autoname if user.name.blank?
-      user.handle = autoname if user.handle.blank?
+    if user.email.present? && user.email.include?('@') && user.name.blank?
+      user.name = user.email.split('@').first.gsub(/\.|-|_/, ' ').titlecase
     end
     true
   end
 
   def self.csv
     CSV.generate force_quotes: true do |csv|
-      csv << ['id', 'name', 'email', 'phone number', 'joined', 'events attended', 'roles', 'alias', 'description']
+      csv << ['id', 'name', 'email', 'phone number', 'joined', 'events attended', 'roles', 'description']
       all.each do |user|
-        csv << [user.id, user.name, user.email, user.phone, user.created_at.to_date.to_s, user.events.past.count, user.roles.map{|r| Configurable.send(r.name)}.join(', '), user.handle, user.description]
+        csv << [user.id, user.name, user.email, user.phone, user.created_at.to_date.to_s, user.events.past.count, user.roles.map{|r| Configurable.send(r.name)}.join(', '), user.description]
       end
     end
   end
@@ -33,7 +31,7 @@ class User < ActiveRecord::Base
   scope :geocoded, -> { where.not lat: nil }
   scope :search, ->(q) {
     like = Rails.configuration.database_configuration[Rails.env]["adapter"] == 'postgresql' ? 'ILIKE' : 'LIKE'
-    where("users.email #{like} ? OR users.name #{like} ? OR users.handle #{like} ?", "%#{q}%", "%#{q}%", "%#{q}%")
+    where("users.email #{like} ? OR users.name #{like} ?", "%#{q}%", "%#{q}%")
   }
   scope :roleless, -> { where 'users.id NOT IN (SELECT DISTINCT user_id FROM roles)' }
   # todo: consider refactoring these to automatically have a scope for every role
@@ -107,7 +105,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name
-    handle || '(no alias)'
+    name || '(no name given)'
   end
 
   def avatar(size = :small)
