@@ -11,9 +11,8 @@
   <% if can? :show, event %>
     <%
       ops = { class: 'event' }
-      coords = event.coords(current_user)
-      ops[:data] = {lat: coords[0], lng: coords[1], popup: true} if coords
+      ops[:data] = {lat: event.lat, lng: event.lng, popup: true} if event.coords
     %>
-    <%= link_to event.display_name(current_user), event, ops %>
+    <%= link_to event.display_name, event, ops %>
   <% end %>
 <% end %>

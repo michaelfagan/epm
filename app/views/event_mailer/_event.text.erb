@@ -4,6 +4,6 @@
 
 When: <% if event.start %><%= date event.start %>, <%= time event.start %> to <%= time event.finish %> (<%= pluralize event.duration_hours, 'hour' %>)<% else %>Date not set<% end %>
 
-<% if event.address && user.ability.can?(:read_specific_location, event) %>
+<% if event.address %>
 Where: <%= event.address %>
 <% end %>

@@ -1,3 +1,3 @@
-<p>This is a reminder that <%= link_to @event.display_name(@user), event_url(@event) %> is happening soon!<p>
+<p>This is a reminder that <%= link_to @event.display_name, event_url(@event) %> is happening soon!<p>
 
 <%= render 'event', event: @event, user: @user %>

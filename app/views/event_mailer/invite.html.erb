@@ -1,4 +1,4 @@
-<p>You are invited to attend <%= link_to @event.display_name(@user), event_url(@event) %>.<p>
+<p>You are invited to attend <%= link_to @event.display_name, event_url(@event) %>.<p>
 
 <%= render 'event', event: @event, user: @user %>
 

@@ -1,4 +1,4 @@
-Sorry, but you are no longer attending an event, <%= @event.display_name(@user) %> <%= event_url @event %>
+Sorry, but you are no longer attending an event, <%= @event.display_name %> <%= event_url @event %>
 <%= "\nThis was to take place on #{date @event.start} at #{time @event.start}." if @event.start %>
 
 <%= "This is because the maximum number of #{Configurable.participant.pluralize} was lowered." if @reason == 'max_changed' %>

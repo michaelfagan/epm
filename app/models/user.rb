@@ -119,6 +119,7 @@ class User < ActiveRecord::Base
     @ability ||= Ability.new(self)
   end
 
+  # this method identical to that in model event.rb
   def coords
     (lat.present? && lng.present?) ? [lat, lng] : nil
   end

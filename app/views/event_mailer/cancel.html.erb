@@ -1,4 +1,4 @@
-<p>An event you were attending, <%= link_to @event.display_name(@user), event_url(@event) %>, has been cancelled.<p>
+<p>An event you were attending, <%= link_to @event.display_name, event_url(@event) %>, has been cancelled.<p>
 
 <% if @event.cancel_description %>
   <strong>Cancellation reason:</strong>

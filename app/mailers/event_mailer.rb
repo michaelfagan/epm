@@ -27,7 +27,7 @@ class EventMailer < ActionMailer::Base
   def cancel(event, users)
     @event = event
     @user = users.first
-    mail bcc: to(users), subject: "#{@event.display_name(@user)} has been cancelled"
+    mail bcc: to(users), subject: "#{@event.display_name} has been cancelled"
   end
 
   def change(event, users)

@@ -1,4 +1,4 @@
-<p>This email confirms that you are attending <%= link_to @event.display_name(@user), event_url(@event) %>.<p>
+<p>This email confirms that you are attending <%= link_to @event.display_name, event_url(@event) %>.<p>
 
 <%= render 'event', event: @event, user: @user %>
 

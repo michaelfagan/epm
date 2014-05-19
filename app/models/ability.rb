@@ -29,7 +29,7 @@ class Ability
 
       if user.has_role? :coordinator
         can :read, Event
-        can [:update, :read_notes, :read_specific_location], Event do |event|
+        can [:update, :read_notes], Event do |event|
           !event.coordinator || (event.coordinator == user)
         end
         can [:ask_to_cancel, :cancel, :invite, :take_attendance], Event, coordinator_id: user.id
@@ -38,9 +38,6 @@ class Ability
 
       if user.has_role? :participant
         can [:attend, :unattend], Event
-        can :read_specific_location, Event do |event|
-          !event.hide_specific_location || event.participants.include?(user)
-        end
       end
 
     end

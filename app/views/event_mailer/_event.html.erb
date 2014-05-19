@@ -17,7 +17,7 @@
       Date not set.
     <% end %>
   </dd>
-  <% if event.address && user.ability.can?(:read_specific_location, event) %>
+  <% if event.address %>
     <dt>Where</dt>
     <dd><%= with_br event.address if event.address %></dd>
   <% end %>

@@ -19,53 +19,6 @@ describe Event do
         expect(e.display_name).to eq '123 fake street'
       end
 
-      it "does not have a display name using the address if hiding address from non-attending participants with nobody specified" do
-        e = build :event, name: nil, description: nil, address: '123 fake street', no_geocode: true, hide_specific_location: true
-        expect(e.display_name).not_to eq '123 fake street'
-      end
-
-      it "has a display name using the address for admins even if hiding address from non-attending participants" do
-        e = build :event, name: nil, description: nil, address: '123 fake street', no_geocode: true, hide_specific_location: true
-        expect(e.display_name create :admin).to eq '123 fake street'
-      end
-
-      it "has a display name using the address for participants only when attending if hiding otherwise" do
-        u = create :participant
-        e = create :participatable_event, name: nil, description: nil, address: '123 fake street', no_geocode: true, hide_specific_location: true
-        expect(e.display_name u).not_to eq '123 fake street'
-        e.attend u
-        expect(e.display_name u).to eq '123 fake street'
-      end
-
-    end
-
-    context "coordinates" do
-
-      it "rounds coordinates to 2 decimal places for non-attending participants and coordinators" do
-        n = 50.5092
-        rounded = [BigDecimal.new(50.51, 6), BigDecimal.new(50.51, 6)]
-        not_rounded = [BigDecimal.new(n, 6), BigDecimal.new(n, 6)]
-        participant = create :participant
-        e = create :participatable_event, lat: n, lng: n, hide_specific_location: true
-        expect(e.coords participant).to eq rounded
-        expect(e.coords create(:coordinator)).to eq rounded
-        e.attend participant
-        expect(e.coords participant).to eq not_rounded
-        expect(e.coords e.coordinator).to eq not_rounded
-      end
-
-      it "does not round coordinates for admin" do
-        n = 50.5092
-        e = build :participatable_event, lat: n, lng: n, hide_specific_location: true
-        expect(e.coords create(:admin)).to eq [BigDecimal.new(n, 6), BigDecimal.new(n, 6)]
-      end
-
-      it "does not round coordinates for events without hide_specific_location" do
-        n = 50.5092
-        e = build :participatable_event, lat: n, lng: n, hide_specific_location: false
-        expect(e.coords).to eq [BigDecimal.new(n, 6), BigDecimal.new(n, 6)]
-      end
-
     end
 
   end

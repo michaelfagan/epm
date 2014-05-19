@@ -1,4 +1,4 @@
-<p>There have been changes to an event you are attending, <%= link_to @event.display_name(@user), event_url(@event) %>. Here are the updated details:<p>
+<p>There have been changes to an event you are attending, <%= link_to @event.display_name, event_url(@event) %>. Here are the updated details:<p>
 
 <%= render 'event', event: @event, user: @user %>
 

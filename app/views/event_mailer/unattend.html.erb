@@ -1,5 +1,5 @@
 <p>
-  Sorry, but you are no longer attending an event, <%= link_to @event.display_name(@user), event_url(@event) %>.
+  Sorry, but you are no longer attending an event, <%= link_to @event.display_name, event_url(@event) %>.
   <% if @event.start %>
     This was to take place on <%= date @event.start %> at <%= time @event.start %>.
   <% end %>

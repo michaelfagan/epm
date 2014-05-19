@@ -182,12 +182,10 @@ class Event < ActiveRecord::Base
   end
 
   include ActionView::Helpers::TextHelper # needed for truncate()
-  def display_name(user = nil)
+  def display_name
     return name if name.present?
     return truncate(description, length: 50, separator: ' ') if description.present?
-    if address.present? && (!hide_specific_location || (user && user.ability.can?(:read_specific_location, self)) )
-      return truncate(address.gsub(/(\n|\r)+/, ', '), length: 50, separator: ' ') if address.present?
-    end
+    return truncate(address.gsub(/(\n|\r)+/, ', '), length: 50, separator: ' ') if address.present?
     return start.strftime('%B %e %Y, %l:%M %p').gsub('  ', ' ') if start.present?
     '(untitled event)'
   end
@@ -235,12 +233,9 @@ class Event < ActiveRecord::Base
     vevent
   end
 
-  def coords(user = nil)
-    return nil if lat.blank? || lng.blank?
-    if !hide_specific_location || (user && user.ability.can?(:read_specific_location, self))
-      return [lat, lng]
-    end
-    [lat.round(2), lng.round(2)]
+  # this method identical to that in model user.rb
+  def coords
+    (lat.present? && lng.present?) ? [lat, lng] : nil
   end
 
   # participant methods

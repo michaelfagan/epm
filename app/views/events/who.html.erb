@@ -5,7 +5,7 @@
   else
     tit += @event.past? ? ' Went' : '’s Coming'
   end
-  title "#{tit} to ‘#{@event.display_name(current_user)}’"
+  title "#{tit} to ‘#{@event.display_name}’"
 %>
 
 <% content_for :header do %>

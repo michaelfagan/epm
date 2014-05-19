@@ -107,25 +107,6 @@ describe "Events" do
         expect(all('.map').length).to eq 0
       end
 
-      it "hides address for non-attendees when indicated", js: true do
-        e = create :participatable_event, address: '123 fake street', lat: 50, lng: 50, hide_specific_location: false
-        login_as @admin
-        visit edit_event_path e
-        check 'Hide specific location'
-        click_button 'Save & Notify'
-        expect(page).to have_content '123 fake street'
-        expect(page).not_to have_content 'shown only to attendees'
-        logout
-        login_as @participant
-        visit event_path e
-        expect(page).not_to have_content '123 fake street'
-        expect(page).to have_content 'shown only to attendees'
-        e.attend @participant
-        visit event_path e
-        expect(page).to have_content '123 fake street'
-        expect(page).not_to have_content 'shown only to attendees'
-      end
-
     end
 
     context "updating" do

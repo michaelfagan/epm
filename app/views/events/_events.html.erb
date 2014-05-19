@@ -1,8 +1,7 @@
 <ol class="events">
   <% events.each do |event| %>
-    <% coords = event.coords(current_user) %>
-    <li<%= " data-lat=\"#{coords[0]}\" data-lng=\"#{coords[1]}\"".html_safe if coords %>>
-      <%= link_to event.display_name(current_user), event %>
+    <li<%= " data-lat=\"#{event.lat}\" data-lng=\"#{event.lng}\"".html_safe if event.coords %>>
+      <%= link_to event.display_name, event %>
       <% if event.start.present? %>
         <small><%= relative_time event %></small>
       <% end %>

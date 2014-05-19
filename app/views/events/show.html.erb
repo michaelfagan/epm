@@ -1,5 +1,5 @@
 <%
-  tit = @event.display_name(current_user)
+  tit = @event.display_name
   tit = "#{@event.status.capitalize}: #{tit}" unless @event.approved?
   title tit
 %>
@@ -66,21 +66,13 @@
 <%= next_col unless @event.description.blank? && @event.start.blank? && (@event.notes.blank? || cannot?(:read_notes, @event)) %>
 
 <% if @event.address || @event.coords %>
-  <% coords = @event.coords(current_user) %>
-  <section id="where"<%= "data-map=\"true\" data-lat=\"#{coords[0]}\" data-lng=\"#{coords[1]}\"".html_safe if coords %>>
+  <section id="where"<%= " data-map=\"true\" data-lat=\"#{@event.lat}\" data-lng=\"#{@event.lng}\"".html_safe if @event.coords %>>
     <%
       output = []
       output << content_tag(:small, "#{@event.distance_to(current_user).round(1)} kms away") if @event.coords && current_user.coords
-      output << with_br(@event.address) if @event.address && can?(:read_specific_location, @event)
+      output << with_br(@event.address) if @event.address
     %>
     <%= output.join('<br>').html_safe if output.any? %>
-    <% if @event.coords %>
-      <% content_for :js_ready do %>
-        <% if cannot? :read_specific_location, @event %>
-          $('.map').before('note: exact location and address shown only to attendees');
-        <% end %>
-      <% end %>
-    <% end %>
   </section>
 <% end %>
 
