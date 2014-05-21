@@ -12,4 +12,11 @@ class ApplicationController < ActionController::Base
    end
   end
 
+  protected
+
+    def after_sign_in_path_for(resource)
+      return edit_user_path(resource) unless resource.sign_in_count > 2 || resource.has_full_profile?
+      super
+    end
+
 end

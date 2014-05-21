@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
     true
   end
 
+  def has_full_profile?
+    name.present? && description.present? && email.present? && phone.present? && address.present? && lat.present? && lng.present?
+  end
+
   def self.csv
     CSV.generate force_quotes: true do |csv|
       csv << ['id', 'name', 'email', 'phone number', 'joined', 'events attended', 'roles', 'description']

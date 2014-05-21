@@ -26,7 +26,7 @@ describe "Authentication" do
 
   it "logs in a user" do
     pass = Faker::Internet.password
-    u = FactoryGirl.create(:user, password: pass)
+    u = create :user, password: pass
     visit new_user_session_path
     fill_in 'E-mail', with: u.email
     fill_in 'Password', with: pass
@@ -35,7 +35,7 @@ describe "Authentication" do
   end
 
   it "fails to log in a user with bad credentials" do
-    u = FactoryGirl.create :user
+    u = create :user
     visit new_user_session_path
     fill_in 'E-mail', with: u.email
     fill_in 'Password', with: Faker::Internet.password

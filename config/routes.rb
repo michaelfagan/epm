@@ -2,7 +2,7 @@ Epm::Application.routes.draw do
 
   root 'events#index'
 
-  devise_for :users, controllers: { registrations: 'registrations' }
+  devise_for :users
   resources :users, only: [:index, :show, :edit, :update] do
     resources :roles, only: [:create, :destroy], shallow: true
     get 'map', on: :collection

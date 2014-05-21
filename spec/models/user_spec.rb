@@ -95,6 +95,19 @@ describe User do
 
     end
 
+    it "indicates whether 'all' attributes have a value" do
+      expect(build(:user).has_full_profile?).to be_false
+      expect(build(:full_user).has_full_profile?).to be_true
+      expect(build(:full_user, name: nil).has_full_profile?).to be_false
+      expect(build(:full_user, description: nil).has_full_profile?).to be_false
+      expect(build(:full_user, address: nil).has_full_profile?).to be_false
+      expect(build(:full_user, lat: nil).has_full_profile?).to be_false
+      expect(build(:full_user, lng: nil).has_full_profile?).to be_false
+      expect(build(:full_user, email: nil).has_full_profile?).to be_false
+      expect(build(:full_user, phone: nil).has_full_profile?).to be_false
+      expect(build(:full_user, name: nil, description: nil).has_full_profile?).to be_false
+    end
+
   end
 
   context "roles" do
