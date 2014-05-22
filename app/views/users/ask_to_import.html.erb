@@ -1,0 +1,30 @@
+<% title 'Import' %>
+
+<%= form_tag import_users_path, multipart: true, method: :patch do %>
+
+  <fieldset>
+    <legend>File</legend>
+    <div style="margin-left:1em">
+      <p>
+        Select a CSV (comma-separated values) file to import.
+        If you have a spreadsheet file, you can open it and resave it in CSV format.
+      </p>
+      <p>
+        It must have one column labeled <kbd>email</kbd>, <kbd>E-mail Address</kbd> or similar.
+        The importer will also try to import names, phone numbers, and addresses, if they are given.
+      </p>
+    </div>
+    <%= file_field_tag :file %>
+  </fieldset>
+
+  <fieldset>
+    <legend>Default Password</legend>
+    <label><%= radio_button_tag :secure, true, true %> Randomly-generated <span class="hint">secure</span></label><br>
+    <label><%= radio_button_tag :secure, false %> Same as user&#8217;s email address <span class="hint">convenient</span></label><br>
+  </fieldset>
+
+  <p>Note: The newly-added users will <strong>not</strong> be sent a confirmation email.</p>
+
+  <%= submit 'Import' %>
+
+<% end %>

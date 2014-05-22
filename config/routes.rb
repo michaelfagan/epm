@@ -5,7 +5,11 @@ Epm::Application.routes.draw do
   devise_for :users
   resources :users, only: [:index, :show, :edit, :update] do
     resources :roles, only: [:create, :destroy], shallow: true
-    get 'map', on: :collection
+    collection do
+      get 'map'
+      get 'import', to: 'users#ask_to_import'
+      patch 'import'
+    end
     patch 'deactivate', on: :member
   end
   get 'me', to: 'users#me'

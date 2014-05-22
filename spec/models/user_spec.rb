@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+# note: tests for import feature are in user_import_spec.rb
+
 describe User do
 
   context "attributes" do
@@ -69,6 +71,11 @@ describe User do
 
       it "generates a name based on email" do
         u = create :user, name: nil, email: 'joe.smith@example.com'
+        expect(u.name).to eq 'Joe Smith'
+      end
+
+      it "generates a name based on email, stripping out numbers" do
+        u = create :user, name: nil, email: 'joe.smith15@example.com'
         expect(u.name).to eq 'Joe Smith'
       end
 

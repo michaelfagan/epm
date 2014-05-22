@@ -311,6 +311,85 @@ describe "Users" do
 
   end
 
+  context "import" do
+
+    it "does not allow participants to import" do
+      login_as @participant
+      visit import_users_path
+      expect(current_path).not_to eq import_users_path
+      expect(page).to have_content 'Sorry'
+    end
+
+    it "does not allow coordinators to import" do
+      login_as @coordinator
+      visit import_users_path
+      expect(current_path).not_to eq import_users_path
+      expect(page).to have_content 'Sorry'
+    end
+
+    it "allows admins to import" do
+      login_as @admin
+      visit users_path
+      click_link 'Import'
+      expect(current_path).to eq import_users_path
+    end
+
+    it "does not import given no file" do
+      login_as @admin
+      visit import_users_path
+      click_button 'Import'
+      expect(current_path).to eq import_users_path
+      expect(page).to have_content 'No file'
+    end
+
+    it "does not import a non-csv file" do
+      login_as @admin
+      visit import_users_path
+      attach_file 'file', Rails.root + 'app/assets/images/calendar.png'
+      click_button 'Import'
+      expect(current_path).to eq import_users_path
+      expect(page).to have_content 'Problem loading'
+    end
+
+    it "does not import a file with only existing users" do
+      create :user, email: 'user@example.com' # same email as in file being uploaded
+      login_as @admin
+      visit import_users_path
+      attach_file 'file', Rails.root + 'spec/files/users.csv'
+      click_button 'Import'
+      expect(current_path).to eq import_users_path
+      expect(page).to have_content 'Imported 0 users'
+    end
+
+    it "imports a file, with default security" do
+      login_as @admin
+      visit users_path
+      expect(page).not_to have_content 'Joe Shmoe'
+      click_link 'Import'
+      attach_file 'file', Rails.root + 'spec/files/users.csv'
+      click_button 'Import'
+      expect(current_path).to eq users_path
+      expect(page).to have_content 'Imported 1 user'
+      expect(page).to have_content 'Joe Shmoe'
+      expect(User.find_by(email: 'user@example.com').valid_password?('user@example.com')).to be_false
+    end
+
+    it "imports a file, with convenient passwords option" do
+      login_as @admin
+      visit users_path
+      expect(page).not_to have_content 'Joe Shmoe'
+      click_link 'Import'
+      attach_file 'file', Rails.root + 'spec/files/users.csv'
+      choose 'email'
+      click_button 'Import'
+      expect(current_path).to eq users_path
+      expect(page).to have_content 'Imported 1 user'
+      expect(page).to have_content 'Joe Shmoe'
+      expect(User.find_by(email: 'user@example.com').valid_password?('user@example.com')).to be_true
+    end
+
+  end
+
 end
 
 # the below tests are separated from above, as the js: true tests were interfering with other tests above and causing them to fail

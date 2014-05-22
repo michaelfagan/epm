@@ -24,7 +24,7 @@ class Ability
       if user.has_role? :admin
         can :manage, [Event, Role, :setting]
         cannot :take_attendance, Event
-        can [:index, :map, :read_contact, :read_attendance], User
+        can [:index, :map, :ask_to_import, :import, :read_contact, :read_attendance], User
       end
 
       if user.has_role? :coordinator

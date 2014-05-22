@@ -353,11 +353,7 @@ class Event < ActiveRecord::Base
     # this method identical to that in model user.rb
     def geocode
       geo = Geokit::Geocoders::MultiGeocoder.geocode address.gsub(/\n/, ', ')
-      if geo.success
-        self.lat, self.lng = geo.lat, geo.lng
-      else
-        errors.add(:address, 'Problem locating address')
-      end
+      self.lat, self.lng = geo.lat, geo.lng if geo.success
     end
 
 end

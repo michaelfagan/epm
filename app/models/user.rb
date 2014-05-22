@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   strip_attributes
   before_create do |user|
     if user.email.present? && user.email.include?('@') && user.name.blank?
-      user.name = user.email.split('@').first.gsub(/\.|-|_/, ' ').titlecase
+      user.name = user.email.split('@').first.gsub(/(\.|-|_|\d)+/, ' ').strip.titlecase
     end
     true
   end
@@ -21,6 +21,67 @@ class User < ActiveRecord::Base
         csv << [user.id, user.name, user.email, user.phone, user.created_at.to_date.to_s, user.events.past.count, user.roles.map{|r| Configurable.send(r.name)}.join(', '), user.description]
       end
     end
+  end
+
+  # rows is an array of arrays, e.g. from parsing a csv file
+  # returns the number of users imported
+  def self.import(rows, secure = true)
+
+    # sanitize input and such. does good stuff but fails if header row is missing columns
+    rows.reject!{|r| r.length.zero? || (r.uniq.length == 1 && r.first.blank?) } # remove blank rows
+    return 0 unless rows.any?
+    # remove title rows
+    number_of_cols = rows.map{|r|r.length}.sort.last
+    return 0 unless number_of_cols > 0
+    first_ok_row = rows.index{|r| r.length == number_of_cols }
+    rows = rows[first_ok_row..-1]
+    # go through each row and append blank columns if it is missing any
+    rows.each do |row|
+      row += Array.new(number_of_cols - row.length) if row.length < number_of_cols
+    end
+    # split off header
+    header = rows.first.map{|c| c.downcase }
+    rows = rows[1..-1]
+
+    # find which column has which info
+    # email (primary key)
+    fields = {}
+    fields[:email] = header.index{|c| c =~ /e(-)?mail/ }
+    return 0 unless fields[:email]
+    # name (first, check for names split into first and last)
+    fname_col = header.index{|c| (c =~ /f(irst)?.?name/) || c == 'first' }
+    if fname_col
+      lname_col = header.index{|c| (c =~ /l(ast)?.?name/) || c == 'last' }
+      if lname_col
+        rows.each {|r| r << [r[fname_col], r[lname_col]].join(' ') }
+        fields[:name] = rows.first.length - 1
+      end
+    end
+    unless fields[:name]
+      fields[:name] = header.index{|c| c.include? 'name' }
+    end
+    # password
+    if secure
+      rows.each {|r| r << Devise.friendly_token.first(8) }
+      fields[:password] = rows.first.length - 1
+    else
+      fields[:password] = fields[:email]
+    end
+    # more fields
+    fields[:phone] = header.index{|c| c.include?('phone') || c.include?('tel') }
+    fields[:address] = header.index{|c| c.include?('address') && c !~ /e(-)?mail/ }
+    fields.reject!{|k, v| !v} # remove fields which aren't actually there
+
+    # add them
+    new_users = 0
+    rows.each do |row|
+      u = User.new
+      fields.each {|attr_name, col_i| u.send "#{attr_name}=", row[col_i] }
+      u.confirmed_at = Time.zone.now # auto-confirm users. also means they won't get sent confirmation emails
+      new_users += 1 if u.save
+    end
+    new_users
+
   end
 
   # this section identical to that in model event.rb
@@ -131,11 +192,7 @@ class User < ActiveRecord::Base
     # this method identical to that in model event.rb
     def geocode
       geo = Geokit::Geocoders::MultiGeocoder.geocode address.gsub(/\n/, ', ')
-      if geo.success
-        self.lat, self.lng = geo.lat, geo.lng
-      else
-        errors.add(:address, 'Problem locating address')
-      end
+      self.lat, self.lng = geo.lat, geo.lng if geo.success
     end
 
 

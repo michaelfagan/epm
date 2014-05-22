@@ -49,6 +49,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def ask_to_import
+  end
+
+  include ActionView::Helpers::TextHelper # needed for pluralize()
+  def import
+    if params[:file] && params[:file].respond_to?(:path)
+      begin
+        imported = User.import CSV.read(params[:file].path), !params[:secure] || params[:secure] != 'false'
+        redirect_to (imported.zero? ? import_users_path : users_path), notice: "Imported #{pluralize imported, 'user'}."
+        return
+      rescue
+        flash[:notice] = 'Problem loading file. Please ensure that it is valid a CSV file.'
+      end
+    else
+      flash[:notice] = 'No file to import.'
+    end
+    redirect_to import_users_path
+  end
+
   def show
     @past_coordinating = @user.coordinating_events.past
     @past_participating = @user.participating_events.past

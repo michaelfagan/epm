@@ -102,6 +102,9 @@ span.hint {
   padding-left: 0.2em;
   color: #aaa;
 }
+legend span.hint {
+  font-weight: normal;
+}
 
 html.js form #coords {
   display: none;

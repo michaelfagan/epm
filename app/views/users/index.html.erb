@@ -1,7 +1,6 @@
-<% if can? :map, User %>
-  <% content_for :header do %>
-    <%= link_to 'Map', map_users_path %>
-  <% end %>
+<% content_for :header do %>
+  <%= link_to('Map', map_users_path) if can? :map, User %>
+  <%= link_to('Import', import_users_path) if can? :import, User %>
 <% end %>
 
 <%= form_tag users_path, method: :get do %>
