@@ -58,17 +58,18 @@ $(function(){
 
   // form stuff
   $('form a').attr('target', '_new');
-  // expand/contract input as content changes length
-  $("form[method!='get']").find("input[data-default_size]").on('keyup paste blur', function(){
-    $(this).attr('size', Math.min(100, Math.max($(this).data('default_size'), $(this).val().length + 3)));
-  });
-  // allow form submission by hitting 'enter' key. this is needed as the 'cancel' button precedes the 'save' button and hitting enter would thus 'cancel' and do nothing
-  $("form input[type='text'], form input[type='email'], form input[type='number'], form input[type='tel']").keypress(function(e) {
-    if (e.keyCode == 13) {
-      $(this).parentsUntil('form').parent().submit();
-      e.preventDefault();
-      return false;
-    }
-  });
+  $("form[method!='get']")
+    // expand/contract input as content changes length
+    .find("input[data-default_size]").on('keyup paste blur', function(){
+      $(this).attr('size', Math.min(100, Math.max($(this).data('default_size'), $(this).val().length + 3)));
+    })
+    // allow form submission by hitting 'enter' key. this is needed as the 'cancel' button precedes the 'save' button and hitting enter would thus 'cancel' and do nothing
+    .find("input[type='text'], input[type='email'], input[type='number'], input[type='tel']").keypress(function(e) {
+      if (e.keyCode == 13) {
+        $(this).parentsUntil('form').parent().submit();
+        e.preventDefault();
+        return false;
+      }
+    });
 
 });

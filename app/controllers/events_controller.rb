@@ -113,7 +113,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    redirect_to(root_path, notice: 'Event not saved.') and return if params['commit'].downcase == 'cancel'
+    redirect_to(root_path, notice: 'Event not saved.') and return if params['commit'] && params['commit'].downcase == 'cancel'
     @event = Event.new event_params
     if @event.save
       if @event.coordinator && @event.coordinator != current_user && !@event.past?
@@ -126,7 +126,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    redirect_to(@event, notice: 'Event changes not saved.') and return if params['commit'].downcase == 'cancel'
+    redirect_to(@event, notice: 'Event changes not saved.') and return if params['commit'] && params['commit'].downcase == 'cancel'
     @event.track
     if @event.update event_params
       # send email notifications if appropriate
@@ -146,7 +146,7 @@ class EventsController < ApplicationController
           EventMailer.coordinator_assigned(@event).deliver
         end
         # alert other attendees
-        if params['commit'].downcase.include?('notify') && !(@event.past? && @event.prior['past?']) && users.any?
+        if params['commit'] && params['commit'].downcase.include?('notify') && !(@event.past? && @event.prior['past?']) && users.any?
           users = users.partition{|u| u.ability.can?(:read_notes, @event)} # .first can read the note, .last can't
           changed_significantly = @event.changed_significantly?
           if (changed_significantly || (@event.notes != @event.prior['notes'])) && users.first.any?
