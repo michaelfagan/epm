@@ -20,7 +20,7 @@ function make_map(map_div, hide_self) {
 function finish_map(map, points) {
   points.push(me);
   if (points.length > 1) {
-    setTimeout(function(){ map.fitBounds(points); }, 0); // https://github.com/Leaflet/Leaflet/issues/2021
+    map.fitBounds(points, {padding: [20, 20]});
   }
 }
 function marker_dragged(e) {

@@ -22,7 +22,7 @@
       lats = everybody.map{|u| u.lat}
       lngs = everybody.map{|u| u.lng}
     %>
-    setTimeout(function(){ map.fitBounds([[<%= lats.min %>, <%= lngs.min %>], [<%= lats.max %>, <%= lngs.max %>]]); }, 0); // https://github.com/Leaflet/Leaflet/issues/2021
+    map.fitBounds([[<%= lats.min %>, <%= lngs.min %>], [<%= lats.max %>, <%= lngs.max %>]], {padding: [20, 20]});
   <% end %>
   Note: Locations are approximate.
 
