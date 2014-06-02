@@ -4,7 +4,7 @@
 <% end %>
 
 <%= form_tag users_path, method: :get do %>
-  <%= select_tag :role, options_for_select(Role.names.map{|n, v| Configurable.send(n).pluralize.titlecase}.unshift(['Everyone', nil]) << ['No roles', 'none'], @role) %>
+  <%= select_tag :role, options_for_select(Role.names.map{|n, v| [Configurable.send(n).pluralize.titlecase, n.pluralize]}.unshift(['Everyone', nil]) << ['No roles', 'none'], @role) %>
   <% content_for :js_ready do %>
     $('select').change(function(){
       $(this).closest('form').submit();
