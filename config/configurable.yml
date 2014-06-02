@@ -14,16 +14,21 @@ email:
   default: no-reply@example.com
 
 admin:
-  name: 'Admin role name'
+  name: Admin role name
   type: string
   default: admin
 
 coordinator:
-  name: 'Coordinator role name'
+  name: Coordinator role name
   type: string
   default: coordinator
 
 participant:
-  name: 'Participant role name'
+  name: Participant role name
   type: string
   default: participant
+
+webmaster:
+  name: Webmaster's email address
+  type: string
+  default: ''

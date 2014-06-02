@@ -1,0 +1,19 @@
+<p>
+  <strong>Error message</strong>: <%= @exception.message %>
+</p>
+
+<% if @request %>
+  <strong>Request</strong>
+  <dl>
+    <dt>URL</dt><dd><%= @request.url %></dd>
+    <dt>User agent</dt><dd><%= @request.env['HTTP_USER_AGENT'] %></dd>
+    <dt>Referrer</dt><dd><%= @request.referer %></dd>
+    <dt>Params</dt><dd><pre><%= @request.params.to_yaml %></pre></dd>
+    <dt>Method</dt><dd><%= @request.method %></dd>
+    <dt>Format</dt><dd><%= @request.format %></dd>
+    <dt>Client IP address</dt><dd><%= @request.remote_ip %></dd>
+  </dl>
+<% end %>
+
+<strong>Backtrace</strong>
+<pre><%= @exception.backtrace.join("\n") %></pre>

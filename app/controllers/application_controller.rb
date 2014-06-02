@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   unless Rails.application.config.consider_all_requests_local
+    rescue_from Exception do |exception|
+      AdminMailer.error_happened(exception, request).deliver if Configurable.webmaster.present?
+      render 'shared/500', status: 500
+    end
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   end
 
