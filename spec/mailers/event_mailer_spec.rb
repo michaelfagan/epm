@@ -6,6 +6,16 @@ describe EventMailer do
     @event = create :participatable_event
   end
 
+  # signature is set in the layout, no need to check every mailer
+  it "includes the email signature" do
+    setting = Configurable.find_or_initialize_by name: 'email_signature'
+    setting.update value: 'Thanks for reading'
+    mail = EventMailer.attend(@event, create(:participant))
+    mail.body.parts.each do |part|
+      expect(part.to_s).to match 'Thanks for reading'
+    end
+  end
+
   context "from" do
 
     # from address is set globally. here we check a few of the mailers but don't bother with all

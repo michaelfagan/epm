@@ -13,6 +13,11 @@ email:
   type: string
   default: no-reply@example.com
 
+email_signature:
+  name: Email Signature
+  type: text
+  default:
+
 event:
   name: Event name
   type: string
