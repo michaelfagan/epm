@@ -1,3 +1,3 @@
-<p>You have been assigned to run an event: <%= link_to @event.display_name, event_url(@event) %>.<p>
+<p>You have been assigned to run <%= Configurable.event.indefinitize %>: <%= link_to @event.display_name, event_url(@event) %>.<p>
 
 <%= render 'event', event: @event, user: @event.coordinator %>

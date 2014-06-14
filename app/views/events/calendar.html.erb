@@ -1,4 +1,4 @@
-<% title 'Events by Month' %>
+<% title "#{Configurable.event.pluralize.titlecase} by Month" %>
 
 <% now = Time.zone.now %>
 <% if params['month'].present? && !(params['month'].to_i == now.month && params['year'].to_i == now.year) %>

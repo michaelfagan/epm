@@ -67,14 +67,14 @@
 
   <% if @past_coordinating.any? %>
     <div id="past_coordinating">
-      <h2>Past Events Run</h2>
+      <h2>Past <%= Configurable.event.pluralize.titlecase %> Run</h2>
       <%= render 'events/events', events: @past_coordinating %>
     </div>
   <% end %>
 
   <% if @past_participating.any? %>
     <div id="past_participating">
-      <h2>Past Events Attended</h2>
+      <h2>Past <%= Configurable.event.pluralize.titlecase %> Attended</h2>
       <%= render 'events/events', events: @past_participating %>
     </div>
   <% end %>

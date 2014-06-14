@@ -15,6 +15,6 @@
   </div>
 
   <%= cancel 'Do Not Cancel' %>
-  <%= submit 'Cancel Event', class: 'danger' %>
+  <%= submit "Cancel #{Configurable.event.titlecase}", class: 'danger' %>
 
 <% end %>

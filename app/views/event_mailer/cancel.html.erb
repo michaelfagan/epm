@@ -1,4 +1,4 @@
-<p>An event you were attending, <%= link_to @event.display_name, event_url(@event) %>, has been cancelled.<p>
+<p><%= Configurable.event.indefinitize.capitalize %> you were attending, <%= link_to @event.display_name, event_url(@event) %>, has been cancelled.<p>
 
 <% if @event.cancel_description %>
   <strong>Cancellation reason:</strong>
@@ -10,4 +10,4 @@
   <%= paragraphs @event.cancel_notes %>
 <% end %>
 
-<p>You can see all upcoming events on the <%= link_to "#{Configurable.title} home page", root_url %>.</p>
+<p>You can see all upcoming <%= Configurable.event.pluralize %> on the <%= link_to "#{Configurable.title} home page", root_url %>.</p>

@@ -2,4 +2,4 @@
 
 <%= render 'event', event: @event, user: @user %>
 
-<p>Please visit the <%= link_to 'event page', event_url(@event) %> to RSVP, even if you are not planning to attend.</p>
+<p>Please visit the <%= link_to "#{Configurable.event} page", event_url(@event) %> to RSVP, even if you are not planning to attend.</p>

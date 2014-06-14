@@ -3,7 +3,7 @@
     <%= link_to 'Monthly Calendar', calendar_events_path %>
   <% end %>
   <% if can? :create, Event %>
-    <%= link_to 'Add New Event', new_event_path %>
+    <%= link_to "Add New #{Configurable.event.titlecase}", new_event_path %>
   <% end %>
 <% end %>
 
@@ -47,4 +47,4 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:p, 'There are no events to display.') if sections_shown.zero? %>
+<%= content_tag(:p, "There are no #{Configurable.event.pluralize} to display.") if sections_shown.zero? %>

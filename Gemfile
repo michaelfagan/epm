@@ -25,6 +25,7 @@ gem 'leaflet-rails'
 gem 'rinku' # URL auto-linking
 gem 'simple_calendar'
 gem 'kaminari' # pagination
+gem 'indefinite_article' # prepends the correct "a" or "an" before a noun
 
 # misc gems
 gem 'strip_attributes' # clean form input
@@ -47,11 +48,10 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'letter_opener'
-end
 
-# should be in dev/test group but currently used for production demo
-gem 'factory_girl_rails'
-gem 'faker'
+  gem 'factory_girl_rails'
+  gem 'faker'
+end
 
 group :test do
   gem 'capybara'

@@ -2,6 +2,8 @@ class EventsController < ApplicationController
  
   load_and_authorize_resource :event
 
+  include ActionView::Helpers::TextHelper # needed for pluralize()
+
   def index
     respond_to do |format|
       format.html do
@@ -113,20 +115,20 @@ class EventsController < ApplicationController
   end
 
   def create
-    redirect_to(root_path, notice: 'Event not saved.') and return if params['commit'] && params['commit'].downcase == 'cancel'
+    redirect_to(root_path, notice: "#{Configurable.event.capitalize} not saved.") and return if params['commit'] && params['commit'].downcase == 'cancel'
     @event = Event.new event_params
     if @event.save
       if @event.coordinator && @event.coordinator != current_user && !@event.past?
         EventMailer.coordinator_assigned(@event).deliver
       end
-      redirect_to @event, notice: 'Event saved.'
+      redirect_to @event, notice: "#{Configurable.event.capitalize} saved."
     else
       render :new
     end
   end
 
   def update
-    redirect_to(@event, notice: 'Event changes not saved.') and return if params['commit'] && params['commit'].downcase == 'cancel'
+    redirect_to(@event, notice: "#{Configurable.event.capitalize} changes not saved.") and return if params['commit'] && params['commit'].downcase == 'cancel'
     @event.track
     if @event.update event_params
       # send email notifications if appropriate
@@ -157,7 +159,7 @@ class EventsController < ApplicationController
           end
         end
       end
-      redirect_to @event, notice: 'Event saved.'
+      redirect_to @event, notice: "#{Configurable.event.capitalize} saved."
     else
       render :edit
     end
@@ -169,9 +171,9 @@ class EventsController < ApplicationController
       if @event.coordinator && @event.coordinator != current_user
         EventMailer.approve(@event).deliver
       end
-      flash[:notice] = 'Event approved.'
+      flash[:notice] = "#{Configurable.event.capitalize} approved."
     else
-      flash[:notice] = 'Cannot approve cancelled events.'
+      flash[:notice] = "Cannot approve cancelled #{Configurable.event.pluralize}."
     end
     redirect_to @event
   end
@@ -180,15 +182,15 @@ class EventsController < ApplicationController
   end
 
   def cancel
-    if params['commit'] == 'Cancel Event'
+    if params['commit'] == "Cancel #{Configurable.event.titlecase}"
       @event.update params.require(:event).permit(:cancel_notes, :cancel_description).merge(status: :cancelled)
       users = (@event.users + User.admins).reject{|u| u == current_user}
       users = users.partition{|u| u.ability.can?(:read_notes, @event)} # .first can read the note, .last can't
       EventMailer.cancel(@event, users.first).deliver if users.first.any?
       EventMailer.cancel(@event, users.last).deliver if users.last.any?
-      flash[:notice] = 'Event cancelled.'
+      flash[:notice] = "#{Configurable.event.capitalize} cancelled."
     else
-      flash[:notice] = 'Event not cancelled.'
+      flash[:notice] = "#{Configurable.event.capitalize} not cancelled."
     end
     redirect_to @event
   end
@@ -206,7 +208,6 @@ class EventsController < ApplicationController
     redirect_to @event
   end
 
-  include ActionView::Helpers::TextHelper # needed for pluralize()
   def invite
     u1 = User.not_involved_in_by_distance(@event).limit(params['invite_near'].to_i)
     u2 = User.not_involved_in_by_distance(@event).participated_in_no_events.limit(params['invite_near_virgin'].to_i)

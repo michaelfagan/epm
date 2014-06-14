@@ -4,4 +4,4 @@ This email confirms that you are attending <%= @event.display_name %>, <%= event
 <%= render 'event', event: @event, user: @user -%>
 
 
-If you are unable to attend the event, please visit the event page to cancel.
+If you are unable to attend the <%= Configurable.event %>, please visit the <%= Configurable.event %> page to cancel.

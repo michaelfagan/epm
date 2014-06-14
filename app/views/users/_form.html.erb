@@ -28,7 +28,7 @@
 
   <%= next_col %>
 
-  <%= render 'shared/address_form', f: f, hint: "to invite you to nearby events; not shown to anyone" %>
+  <%= render 'shared/address_form', f: f, hint: "to invite you to nearby #{Configurable.event.pluralize}; not shown to anyone" %>
 
   <%= end_cols %>
 

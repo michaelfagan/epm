@@ -26,7 +26,7 @@ module EventsHelper
         next_text: '<span>next </span>»'.html_safe
       }
       if can? :create, Event
-        add_link = lambda{ |date| link_to '+', new_event_path(start_day: date), class: 'add', title: 'add event on this day' }
+        add_link = lambda{ |date| link_to '+', new_event_path(start_day: date), class: 'add', title: "add #{Configurable.event} on this day" }
         options[:empty_date] = add_link
         options[:not_empty_date] = add_link
       end
@@ -49,7 +49,7 @@ module SimpleCalendar
         next_month = selected_month.advance :months => 1
         tags = []
         tags << month_link(options[:prev_text], previous_month, options[:params], {:class => "previous-month"})
-        tags << "#{I18n.t("date.month_names")[selected_month.month]} #{selected_month.year} &ndash; #{pluralize @events.length, 'Event'}"
+        tags << "#{I18n.t("date.month_names")[selected_month.month]} #{selected_month.year} &ndash; #{pluralize @events.length, Configurable.event.titlecase}"
         tags << month_link(options[:next_text], next_month, options[:params], {:class => "next-month"})
         tags.join.html_safe
       end

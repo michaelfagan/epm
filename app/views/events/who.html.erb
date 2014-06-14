@@ -9,7 +9,7 @@
 %>
 
 <% content_for :header do %>
-  <%= link_to 'Event Details', @event %>
+  <%= link_to "#{Configurable.event.titlecase} Details", @event %>
   <%= link_to('Edit Attendance', take_attendance: true) if @can_take_attendance && !@taking_attendance %>
   <%= link_to("Invite #{Configurable.participant.pluralize.titlecase}", invite: true) if @can_invite && !@inviting %>
 <% end %>
@@ -69,7 +69,7 @@
           %>
           <label class="field">
             Invite the nearest <%= number_field_tag 'invite_near_virgin', 0, min: 0, max: nearby_virgin, value: suggested_virgin %>
-            <%= Configurable.participant.pluralize %> who have not been to any events yet.
+            <%= Configurable.participant.pluralize %> who have not been to any <%= Configurable.event.pluralize %> yet.
             <br><span class="hint" style="padding-left:0">may include some of the same people as above</span>
           </label>
         <% end %>

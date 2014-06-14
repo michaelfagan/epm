@@ -1,5 +1,5 @@
-<p>There have been changes to an event you are attending, <%= link_to @event.display_name, event_url(@event) %>. Here are the updated details:<p>
+<p>There have been changes to <%= Configurable.event.indefinitize %> you are attending, <%= link_to @event.display_name, event_url(@event) %>. Here are the updated details:<p>
 
 <%= render 'event', event: @event, user: @user %>
 
-<p>If you are unable to attend the event, please visit the <%= link_to 'event page', event_url(@event) %> to cancel.</p>
+<p>If you are unable to attend the <%= Configurable.event %>, please visit the <%= link_to 'event page', event_url(@event) %> to cancel.</p>

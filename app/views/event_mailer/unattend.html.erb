@@ -1,5 +1,5 @@
 <p>
-  Sorry, but you are no longer attending an event, <%= link_to @event.display_name, event_url(@event) %>.
+  Sorry, but you are no longer attending <%= Configurable.event.indefinitize %>, <%= link_to @event.display_name, event_url(@event) %>.
   <% if @event.start %>
     This was to take place on <%= date @event.start %> at <%= time @event.start %>.
   <% end %>
@@ -9,4 +9,4 @@
   <p>This is because the maximum number of <%= Configurable.participant.pluralize %> was lowered.</p>
 <% end %>
 
-<p>You can see all the events you are attending on <%= link_to 'your profile page', me_url %>.</p>
+<p>You can see all the <%= Configurable.event.pluralize %> you are attending on <%= link_to 'your profile page', me_url %>.</p>

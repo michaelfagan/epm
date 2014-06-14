@@ -2,4 +2,4 @@ You are invited to attend <%= @event.display_name %>, <%= event_url(@event) %>
 
 <%= render 'event', event: @event, user: @user %>
 
-Please visit the event page to RSVP, even if you are not planning to attend.
+Please visit the <%= Configurable.event %> page to RSVP, even if you are not planning to attend.

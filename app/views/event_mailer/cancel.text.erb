@@ -1,6 +1,6 @@
-An event you were attending, <%= @event.display_name %>, has been cancelled.
+<%= Configurable.event.indefinitize.capitalize %> you were attending, <%= @event.display_name %>, has been cancelled.
 
 <%= "Cancellation reason: #{with_br @event.cancel_description}" if @event.cancel_description %>
 <%= "Notes for #{Configurable.admin.pluralize} and #{Configurable.coordinator}: #{with_br @event.cancel_notes}" if @event.cancel_notes && @user.ability.can?(:read_notes, @event) %>
 
-You can see all upcoming events at <%= root_url %>
+You can see all upcoming <%= Configurable.event.pluralize %> at <%= root_url %>

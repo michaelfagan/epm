@@ -13,6 +13,11 @@ email:
   type: string
   default: no-reply@example.com
 
+event:
+  name: Event name
+  type: string
+  default: event
+
 admin:
   name: Admin role name
   type: string
