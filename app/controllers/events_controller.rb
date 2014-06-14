@@ -29,7 +29,7 @@ class EventsController < ApplicationController
           @sections << { q: current_user.potential_events, name: 'May be Attending' }
         end
         if current_user.has_any_role? :coordinator, :admin
-          @sections << { q: Event.where(coordinator_id: nil).not_past.not_cancelled, name: "Needing a #{Configurable.coordinator.titlecase}" }
+          @sections << { q: Event.where(coordinator_id: nil).not_past.not_cancelled, name: "Needing #{Configurable.coordinator.titlecase.indefinitize}" }
         end
         if current_user.has_role? :admin
           @sections << { q: Event.where.not(coordinator_id: nil).where('start IS NULL OR lat IS NULL').not_past.not_cancelled, name: 'Missing a Date or Location' }
