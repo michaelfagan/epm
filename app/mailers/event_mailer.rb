@@ -2,6 +2,8 @@ class EventMailer < ActionMailer::Base
 
   default from: "#{Configurable.title} <#{Configurable.email}>"
 
+  include ActionView::Helpers::TextHelper # needed for pluralize()
+
   # in many of these methods, @user is for checking permissions -
   #   usually passing in an array of users who all have the same permissions so can just use the first
 
@@ -10,7 +12,7 @@ class EventMailer < ActionMailer::Base
     @event = event
     # users are all participants, but as some could also be admins, need to do this for permissions:
     @user = users.find{|u| u.ability.cannot?(:read_notes, event)} || users.first
-    mail bcc: to(users), subject: 'You are attending an event'
+    mail bcc: to(users), subject: "You are attending #{Configurable.event.indefinitize}"
   end
 
   def unattend(event, users, reason = nil)
@@ -21,7 +23,7 @@ class EventMailer < ActionMailer::Base
 
   def coordinator_assigned(event)
     @event = event
-    mail to: to(@event.coordinator), subject: 'You have been assigned an event'
+    mail to: to(@event.coordinator), subject: "You have been assigned #{Configurable.event.indefinitize}"
   end
 
   def cancel(event, users)
@@ -33,18 +35,18 @@ class EventMailer < ActionMailer::Base
   def change(event, users)
     @event = event
     @user = users.first
-    mail bcc: to(users), subject: 'Changes to an event you are attending'
+    mail bcc: to(users), subject: "Changes to #{Configurable.event.indefinitize} you are attending"
   end
 
   def awaiting_approval(event, users)
     @event = event
     @user = users.first
-    mail bcc: to(users), subject: 'An event is awaiting approval'
+    mail bcc: to(users), subject: "#{Configurable.event.indefinitize.capitalize} is awaiting approval"
   end
 
   def approve(event)
     @event = event
-    mail to: to(event.coordinator), subject: 'Your event has been approved'
+    mail to: to(event.coordinator), subject: "Your #{Configurable.event} has been approved"
   end
 
   def invite(event, users)
@@ -52,10 +54,9 @@ class EventMailer < ActionMailer::Base
     users = [*users]
     # users are all participants, but as some could also be admins, need to do this for permissions:
     @user = users.find{|u| u.ability.cannot?(:read_notes, event)} || users.first
-    mail bcc: to(users), subject: 'You are invited to an event'
+    mail bcc: to(users), subject: "You are invited to #{Configurable.event.indefinitize}"
   end
 
-  include ActionView::Helpers::TextHelper # needed for pluralize()
   def remind(event, users = nil)
     @event = event
     users ||= @event.users
