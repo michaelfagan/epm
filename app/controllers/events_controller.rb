@@ -182,7 +182,7 @@ class EventsController < ApplicationController
   end
 
   def cancel
-    if params['commit'] == "Cancel #{Configurable.event.titlecase}"
+    if params['commit'] && params['commit'] == "Cancel #{Configurable.event.titlecase}"
       @event.update params.require(:event).permit(:cancel_notes, :cancel_description).merge(status: :cancelled)
       users = (@event.users + User.admins).reject{|u| u == current_user}
       users = users.partition{|u| u.ability.can?(:read_notes, @event)} # .first can read the note, .last can't
