@@ -75,6 +75,10 @@ class Event < ActiveRecord::Base
       @cancel_description = str
     end
   end
+  def cancel(reasons = {})
+    update reasons.merge(status: :cancelled)
+    Invitation.where(event_id: id).destroy_all
+  end
 
   has_many :event_users, dependent: :destroy
   has_many :participants, -> { where 'event_users.status' => EventUser.statuses_array(:attending, :attended) }, through: :event_users, source: :user

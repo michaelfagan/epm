@@ -153,6 +153,31 @@ describe Event do
 
   end
 
+  context "cancelling" do
+
+    it "cancels an event" do
+      e = create :event
+      e.cancel
+      expect(e.cancelled?).to be_true
+    end
+
+    it "cancels an event with reasons" do
+      e = create :event
+      e.cancel(cancel_notes: 'reason for admin', cancel_description: 'public reason')
+      expect(e.notes).to include 'reason for admin'
+      expect(e.description).to include 'public reason'
+    end
+
+    it "deletes invites when an event is cancelled" do
+      e = create :event
+      Invitation.create event: e, user: create(:user)
+      expect(Invitation.where(event_id: e.id).any?).to be_true
+      e.cancel
+      expect(Invitation.where(event_id: e.id).reload.any?).to be_false
+    end
+
+  end
+
   it "responds properly to awaiting_approval? method" do
     c = create :coordinator
     expect(create(:event, status: :proposed, coordinator: c).awaiting_approval?).to be_true
