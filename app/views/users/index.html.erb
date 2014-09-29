@@ -14,7 +14,7 @@
   <%= submit 'Search' %>
 <% end %>
 
-<%= link_to 'Export these users', users_path(format: 'csv' ) %>
+<%= link_to 'Export these users', users_path(format: 'csv', role: params[:role], q: params[:q]) %>
 
 
 <% if @users.any? %>

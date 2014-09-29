@@ -61,16 +61,33 @@ describe "Users" do
       expect(page).to have_content @participant.display_name
     end
 
-    it "exports user list to csv" do
-      login_as @admin
-      visit users_path
-      click_link 'Export'
-      csv = CSV.parse(source) # using source as page has normalized the whitespace (thus having no newlines)
-      expect(csv.length).to eq (User.count + 1)
-      ['id', 'name', 'email', 'phone number', 'description', 'roles', 'events attended as a participant', 'joined'].each do |field|
-        expect(csv.first).to include field
+    context "csv export" do
+
+      it "exports all users" do
+        login_as @admin
+        visit users_path
+        click_link 'Export'
+        csv = CSV.parse(source) # using source as page has normalized the whitespace (thus having no newlines)
+        expect(csv.length).to eq (User.count + 1)
+        ['id', 'name', 'email', 'phone number', 'description', 'roles', 'events attended as a participant', 'joined'].each do |field|
+          expect(csv.first).to include field
+        end
+        expect(page).to have_content @admin.email
       end
-      expect(page).to have_content @admin.email
+
+      it "exports coordinators only" do
+        login_as @admin
+        visit users_path
+        select 'Coordinators', from: 'role'
+        click_button 'Search'
+        expect(page).to have_content "#{User.coordinators.count} User"
+        click_link 'Export'
+        csv = CSV.parse(source) # using source as page has normalized the whitespace (thus having no newlines)
+        expect(csv.length).to eq (User.coordinators.count + 1)
+        expect(page).to have_content @coordinator.email
+        expect(page).not_to have_content @admin.email
+      end
+
     end
 
     it "shows 20 users per page" do

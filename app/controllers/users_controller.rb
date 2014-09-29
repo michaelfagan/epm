@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html { @users = @users.page(params[:page]).per(20) }
-      format.csv { send_data @users.csv }
+      format.csv { send_data User.csv(@users) }
     end
   end
 
