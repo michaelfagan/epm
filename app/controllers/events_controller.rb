@@ -25,7 +25,7 @@ class EventsController < ApplicationController
           @sections << { q: current_user.coordinating_events.not_past, name: "Run by Me", id: 'coordinating' }
         end
         if current_user.has_role? :participant
-          @sections << { q: current_user.participating_events.not_past, name: 'Attending' }
+          @sections << { q: current_user.participating_events, name: 'Attending' }
           @sections << { q: current_user.potential_events, name: 'May be Attending' }
         end
         if current_user.has_any_role? :coordinator, :admin

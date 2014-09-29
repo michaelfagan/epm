@@ -67,7 +67,7 @@ describe "Users" do
       click_link 'Export'
       csv = CSV.parse(source) # using source as page has normalized the whitespace (thus having no newlines)
       expect(csv.length).to eq (User.count + 1)
-      ['id', 'name', 'email', 'phone number', 'description', 'roles', 'events attended', 'joined'].each do |field|
+      ['id', 'name', 'email', 'phone number', 'description', 'roles', 'events attended as a participant', 'joined'].each do |field|
         expect(csv.first).to include field
       end
       expect(page).to have_content @admin.email
@@ -144,8 +144,9 @@ describe "Users" do
         @u = create :full_user, address: '123 Fake Street, City' # set address without newlines so we don't have to worry about matching that
         @u.roles.create name: :participant
         @e = create :participatable_event
-        @e.attend @u
+        eu = @e.attend @u
         @e.update(start: 1.month.ago, finish: 1.month.ago + 1.hour)
+        eu.update status: :attended
       end
 
       it "shows profile with all contact info and attendance history to self" do

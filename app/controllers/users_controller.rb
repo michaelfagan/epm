@@ -70,7 +70,7 @@ class UsersController < ApplicationController
 
   def show
     @past_coordinating = @user.coordinating_events.past
-    @past_participating = @user.participating_events.past
+    @past_participating = @user.participated_events
   end
 
   def edit

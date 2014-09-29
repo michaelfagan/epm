@@ -16,9 +16,9 @@ class User < ActiveRecord::Base
 
   def self.csv
     CSV.generate force_quotes: true do |csv|
-      csv << ['id', 'name', 'email', 'phone number', 'joined', 'events attended', 'roles', 'description']
+      csv << ['id', 'name', 'email', 'phone number', 'joined', "events attended as #{Configurable.participant.indefinitize}", 'roles', 'description']
       all.each do |user|
-        csv << [user.id, user.name, user.email, user.phone, user.created_at.to_date.to_s, user.events.past.count, user.roles.map{|r| Configurable.send(r.name)}.join(', '), user.description]
+        csv << [user.id, user.name, user.email, user.phone, user.created_at.to_date.to_s, user.participated_events.count, user.roles.map{|r| Configurable.send(r.name)}.join(', '), user.description]
       end
     end
   end
@@ -124,8 +124,8 @@ class User < ActiveRecord::Base
 
   has_many :event_users, dependent: :destroy
   has_many :coordinating_events, -> { where.not(status: Event.statuses[:cancelled]) }, class_name: 'Event', foreign_key: 'coordinator_id'
-  has_many :participating_events, -> {
-      where('event_users.status' => EventUser.statuses_array(:attending, :attended)).where('events.status = ?', Event.statuses[:approved])
+  has_many :participated_events, -> { # events where a user was marked as having attended (and thus in the past and not cancelled)
+      where('event_users.status' => EventUser.statuses[:attended]).where('events.status = ?', Event.statuses[:approved])
     }, through: :event_users, source: :event
   def events # where the user is a participant or the coordinator
     Event.not_cancelled
@@ -144,6 +144,13 @@ class User < ActiveRecord::Base
     Event.not_past.not_cancelled.joins(:event_users)
       .where(
         'event_users.status' => EventUser.statuses_array(:waitlisted, :requested),
+        'event_users.user_id' => id
+      )
+  end
+  def participating_events # upcoming events the participant plans to attend
+    Event.not_past.not_cancelled.joins(:event_users)
+      .where(
+        'event_users.status' => EventUser.statuses[:attending],
         'event_users.user_id' => id
       )
   end
