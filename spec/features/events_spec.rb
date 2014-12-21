@@ -848,6 +848,33 @@ describe "Events" do
 
     end
 
+    context "csv" do
+
+      it "does not allow participants to export" do
+        login_as create :participant
+        visit root_path
+        expect(page).not_to have_link 'Export Events'
+      end
+
+      it "does not allow coordinators to export" do
+        login_as create :coordinator
+        visit root_path
+        expect(page).not_to have_link 'Export Events'
+      end
+
+      it "exports" do
+        login_as create :admin
+        visit root_path
+        click_link 'Export Events'
+        csv = CSV.parse(source) # using source as page has normalized the whitespace (thus having no newlines)
+        expect(csv.length).to eq (Event.count + 1)
+        ['id', 'name', 'description', 'notes', 'address', 'status', 'min participants', 'max participants', 'created', 'updated', 'start', 'finish', 'coordinator', 'participants invited', 'participants attending', 'participants cancelled', 'participants waitlisted', 'participants no_show'].each do |field|
+          expect(csv.first).to include field
+        end
+      end
+
+    end
+
   end
 
 end

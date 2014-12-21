@@ -5,6 +5,9 @@
   <% if can? :create, Event %>
     <%= link_to "Add New #{Configurable.event.titlecase}", new_event_path %>
   <% end %>
+  <% if can? :export, Event %>
+    <%= link_to "Export #{Configurable.event.pluralize.titlecase}", events_path(format: 'csv') %>
+  <% end %>
 <% end %>
 
 

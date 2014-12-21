@@ -67,6 +67,10 @@ class EventsController < ApplicationController
         Event.with_date.each {|event| cal.add_event event.to_ical(request.host) }
         render text: cal.to_ical
       end
+      format.csv do
+        @events = can?(:export, Event) ? Event.all : []
+        send_data Event.csv @events
+      end
     end
   end
 

@@ -2,6 +2,20 @@ class Event < ActiveRecord::Base
 
   strip_attributes
 
+  def self.csv(events)
+    # exports events; adds info for number of people for each event user status, i.e. how many attended, how many were waitlisted, etc.
+    CSV.generate force_quotes: true do |csv|
+      eu_statuses = EventUser.statuses.keys.map{|s| "#{Configurable.participant.pluralize} #{s}"}
+      csv << ['id', 'name', 'status', 'created', 'updated', 'start', 'finish', 'description', 'notes', Configurable.coordinator, 'address', "min #{Configurable.participant.pluralize}", "max #{Configurable.participant.pluralize}"] + eu_statuses
+      events.each do |event|
+        row = [event.id, event.name, event.status, event.created_at, event.updated_at, event.start, event.finish, event.description, event.notes, event.coordinator ? event.coordinator.name : nil, event.address, event.min, event.max]
+        eus = event.event_users.group('event_users.status').count
+        EventUser.statuses.each{|status, status_id| row << (eus[status_id] || 0) }
+        csv << row
+      end
+    end
+  end
+
   def coordinator_id=(val)
     # this was needed due to radio button converting 'nil' value to 'on' to 0
     val = nil unless val.to_i > 0
