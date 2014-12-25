@@ -111,7 +111,7 @@ describe "Authentication" do
       fill_in 'Password confirmation', with: new_password
       fill_in 'Current password', with: @original_password
       click_button 'Change'
-      expect(page).to have_content 'You updated your account successfully'
+      expect(page).to have_content 'You account has been updated successfully'
     end
 
   end
