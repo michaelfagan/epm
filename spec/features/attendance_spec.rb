@@ -310,6 +310,10 @@ describe "Event Attendance" do
         expect(page).to have_link @participant.display_name
         expect(page).not_to have_link p2.display_name
       end
+      within '#absent_participants' do
+        expect(page).not_to have_link @participant.display_name
+        expect(page).to have_link p2.display_name
+      end      
     end
 
     it "does not allow taking attendance on a cancelled event" do

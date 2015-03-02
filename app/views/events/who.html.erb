@@ -122,6 +122,21 @@
     <% end %>
   </section>
 
+  <section id="absent_participants">
+    <h2>
+      <%= pluralize @event.event_users.where(status: EventUser.statuses_array(:no_show)).count, "Absent " +Configurable.participant.titlecase %>
+    </h2>
+    <% if @event.participants.any? %>
+      <ul class="users">
+        <% @event.event_users.where(status: EventUser.statuses_array(:no_show)).each do |eventuser| %>
+            <%= render 'users/user', user: eventuser.user, tag: 'li' %>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>None<%= ' yet' if !@event.past? %>.</p>
+    <% end %>
+  </section>
+
   <% if (current_user.has_role?(:admin) || current_user == @event.coordinator) && @event.approved? && !@event.past? && @event.waitlisted.any? %>
     <section id="waitlisted">
       <h2><%= @event.waitlisted.count %> Waitlisted</h2>
