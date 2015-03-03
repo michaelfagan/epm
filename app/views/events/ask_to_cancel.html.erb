@@ -16,5 +16,7 @@
 
   <%= cancel 'Do Not Cancel' %>
   <%= submit "Cancel #{Configurable.event.titlecase}", class: 'danger' %>
-
+<% end %>
+<%= form_for @event, url: event_path(@event), method: :delete do |f| %>
+    <%= submit "Delete #{Configurable.event.titlecase}", class: 'danger', onClick: "doc" %>
 <% end %>

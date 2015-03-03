@@ -725,6 +725,38 @@ describe "Events" do
 
     end
 
+    context "deleting" do
+
+      it "allows admin to delete an event" do
+        e = create :full_event
+        ename = e.name.gsub("","")
+        login_as @admin
+        visit event_path e
+        click_link 'Cancel'
+        fill_in 'Reason', with: 'Bad weather'
+        click_button 'Delete Event'
+        expect(current_path).to eq events_path
+        expect(page).to have_content 'Event deleted'
+        expect(page).not_to have_link e.display_name
+      end
+
+      it "does not allow coordinators to delete an event" do
+        # even if it's an event they are coordinating
+        e = create :event, coordinator: create(:coordinator)
+        login_as e.coordinator
+        visit event_path e
+        expect(page).not_to  have_link 'Cancel'
+      end
+
+      it "does not allow participants to delete an event" do
+        e = create :participatable_event
+        login_as @participant
+        visit event_path e
+        expect(page).not_to have_link 'Cancel'
+      end
+
+    end
+
     context "cancelling" do
 
       it "cancels an event" do

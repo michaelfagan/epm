@@ -199,6 +199,15 @@ class EventsController < ApplicationController
     redirect_to @event
   end
 
+  def destroy
+    if @event.destroy
+      flash[:notice] = "#{Configurable.event.capitalize} deleted."
+    else
+      flash[:notice] = "#{Configurable.event.capitalize} not deleted."
+    end
+    redirect_to events_path
+  end
+
   def attend
     eu = @event.attend current_user
     EventMailer.attend(@event, current_user).deliver if eu.attending?
