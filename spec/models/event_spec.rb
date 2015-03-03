@@ -159,18 +159,16 @@ describe Event do
     it "destroys an event" do
       e = create :event
       e.destroy
-      expect(e?).to nil
+      expect(Event.where(id: e.id).any?).to be_false
     end
 
     it "destroys event users when event is destroyed" do
       e = create :event
       u = create :user
-      e.attend u
+      eu = e.attend u
       expect(e.event_users.count).to eq 1
-      eu = e.event_users.first
-      e.destroy
-      expect(e).to nil      
-      expect(eu).to nil
+      e.destroy     
+      expect(EventUser.where(id: eu.id).any?).to be_false
       expect(u).to be_true
     end
 
