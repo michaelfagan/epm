@@ -154,6 +154,28 @@ describe Event do
 
   end
 
+  context "destroying" do
+
+    it "destroys an event" do
+      e = create :event
+      e.destroy
+      expect(e?).to nil
+    end
+
+    it "destroys event users when event is destroyed" do
+      e = create :event
+      u = create :user
+      e.attend u
+      expect(e.event_users.count).to eq 1
+      eu = e.event_users.first
+      e.destroy
+      expect(e).to nil      
+      expect(eu).to nil
+      expect(u).to be_true
+    end
+
+  end
+
   context "cancelling" do
 
     it "cancels an event" do
