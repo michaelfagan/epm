@@ -26,6 +26,6 @@
 
   <h2>Delete</h2>
 
-  <%= submit "Permanently Delete #{Configurable.event.titlecase}", class: 'danger', data: {confirm: "Delete ‘#{@event.display_name(current_user)}’? This cannot be undone."} %>
+  <%= submit "Permanently Delete #{Configurable.event.titlecase}", class: 'danger', data: {confirm: "Delete ‘#{@event.display_name}’? This cannot be undone."} %>
 
 <% end %>
