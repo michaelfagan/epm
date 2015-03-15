@@ -97,6 +97,7 @@ class Event < ActiveRecord::Base
   has_many :event_users, dependent: :destroy
   has_many :participants, -> { where 'event_users.status' => EventUser.statuses_array(:attending, :attended) }, through: :event_users, source: :user
   has_many :waitlisted, -> { where('event_users.status' => EventUser.statuses[:waitlisted]).order('event_users.updated_at') }, through: :event_users, source: :user
+  has_many :no_shows, -> { where 'event_users.status' => EventUser.statuses['no_show'] }, through: :event_users, source: :user
   belongs_to :coordinator, class_name: 'User'
   def users # i.e. participants and the coordinator
     people = participants.to_a

@@ -307,10 +307,12 @@ describe "Event Attendance" do
       expect(current_path).to eq who_event_path e
       expect(page).to have_content 'Attendance taken'
       within '#participants' do
+        expect(page).to have_content '1 Participant'
         expect(page).to have_link @participant.display_name
         expect(page).not_to have_link p2.display_name
       end
-      within '#absent_participants' do
+      within '#no_show_participants' do
+        expect(page).to have_content '1 Absent Participant'
         expect(page).not_to have_link @participant.display_name
         expect(page).to have_link p2.display_name
       end      
@@ -346,6 +348,15 @@ describe "Event Attendance" do
       login_as @participant
       visit who_event_path e
       expect(page).not_to have_button 'Take Attendance'
+    end
+
+    it "does not show no show participants when there are none" do
+      e = create :participatable_past_event
+      eu = e.event_users.create user: @participant, status: :attended
+      login_as e.coordinator
+      visit who_event_path e
+      expect(page).to have_content '1 Participant'
+      expect(page).not_to have_content 'Absent Participant'
     end
 
     it "allows coordinator to edit attendance to make corrections" do

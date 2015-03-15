@@ -626,6 +626,22 @@ describe Event do
         expect(eu4.reload.attending?).to be_true
       end
 
+      it "lists participants without including noshows" do
+        e = create :participatable_event
+        eu_attender = e.attend create :participant
+        eu_no_shower = e.attend create :participant
+        e.take_attendance [eu_attender.id]
+        expect(e.participants).to eq [eu_attender.user]
+      end
+
+      it "lists no show participants" do
+        e = create :participatable_event
+        eu_attender = e.attend create :participant
+        eu_no_shower = e.attend create :participant
+        e.take_attendance [eu_attender.id]
+        expect(e.no_shows).to eq [eu_no_shower.user]
+      end
+
       it "lists events needing attendance taken" do
         Event.destroy_all # todo: why is this not handled by database cleaner
         c = create :coordinator
