@@ -164,12 +164,10 @@ describe Event do
 
     it "destroys event users when event is destroyed" do
       e = create :event
-      u = create :user
-      eu = e.attend u
-      expect(e.event_users.count).to eq 1
-      e.destroy     
-      expect(EventUser.where(id: eu.id).any?).to be_false
-      expect(u).to be_true
+      eu = e.attend create(:participant)
+      expect(e.event_users.any?).to be_true
+      e.destroy
+      expect(e.event_users.reload.any?).to be_false
     end
 
   end

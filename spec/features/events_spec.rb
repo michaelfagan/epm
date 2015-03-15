@@ -165,7 +165,7 @@ describe "Events" do
         e = create :participatable_event
         visit event_path e
         expect(page).not_to have_content 'Edit'
-        visit edit_event_path(e)
+        visit edit_event_path e
         expect(page).to have_content 'Sorry'
       end
 
@@ -728,15 +728,14 @@ describe "Events" do
     context "deleting" do
 
       it "allows admin to delete an event" do
-        e = create :full_event
-        ename = e.name.gsub("","")
+        e = create :event
         login_as @admin
         visit event_path e
-        click_link 'Cancel'
-        fill_in 'Reason', with: 'Bad weather'
+        click_link 'Delete'
+        expect(current_path).to eq cancel_event_path e
         click_button 'Delete Event'
         expect(current_path).to eq events_path
-        expect(page).to have_content 'Event deleted'
+        expect(page).to have_content "#{e.display_name} deleted"
         expect(page).not_to have_link e.display_name
       end
 
@@ -745,7 +744,10 @@ describe "Events" do
         e = create :event, coordinator: create(:coordinator)
         login_as e.coordinator
         visit event_path e
-        expect(page).not_to  have_link 'Cancel'
+        expect(page).not_to have_link 'Cancel'
+        visit cancel_event_path e
+        expect(current_path).not_to eq cancel_event_path e
+        expect(page).to have_content 'Sorry'
       end
 
       it "does not allow participants to delete an event" do
@@ -753,6 +755,9 @@ describe "Events" do
         login_as @participant
         visit event_path e
         expect(page).not_to have_link 'Cancel'
+        visit cancel_event_path e
+        expect(current_path).not_to eq cancel_event_path e
+        expect(page).to have_content 'Sorry'
       end
 
     end

@@ -201,9 +201,9 @@ class EventsController < ApplicationController
 
   def destroy
     if @event.destroy
-      flash[:notice] = "#{Configurable.event.capitalize} deleted."
+      flash[:notice] = "#{@event.display_name} deleted."
     else
-      flash[:notice] = "#{Configurable.event.capitalize} not deleted."
+      flash[:notice] = "Unable to delete #{@event.display_name}."
     end
     redirect_to events_path
   end
