@@ -112,11 +112,7 @@
       <% end %>
     </h2>
     <% if @event.participants.any? %>
-      <ul class="users">
-        <% @event.participants.each do |user| %>
-          <%= render 'users/user', user: user, tag: 'li' %>
-        <% end %>
-      </ul>
+      <%= render 'users/users', users: @event.participants %>
     <% else %>
       <p>None<%= ' yet' if !@event.past? %>.</p>
     <% end %>
@@ -125,22 +121,14 @@
   <% if @event.no_shows.any? %>
     <section id="no_show_participants">
       <h2><%= pluralize @event.no_shows.count, "Absent #{Configurable.participant.titlecase}" %></h2>
-      <ul class="users">
-        <% @event.no_shows.each do |user| %>
-            <%= render 'users/user', user: user, tag: 'li' %>
-        <% end %>
-      </ul>
+      <%= render 'users/users', users: @event.no_shows %>
     </section>
   <% end %>
 
   <% if (current_user.has_role?(:admin) || current_user == @event.coordinator) && @event.approved? && !@event.past? && @event.waitlisted.any? %>
     <section id="waitlisted">
       <h2><%= @event.waitlisted.count %> Waitlisted</h2>
-      <ul class="users">
-        <% @event.waitlisted.each do |user| %>
-          <%= render 'users/user', user: user, tag: 'li' %>
-        <% end %>
-      </ul>
+      <%= render 'users/users', users: @event.waitlisted %>
     </section>
   <% end %>
 
