@@ -21,7 +21,7 @@
     <%= link_to 'Approve', approve_event_path(@event), method: :patch %>
   <% end %>
   <% if can?(:cancel, @event) && !@event.cancelled? %>
-    <%= link_to 'Cancel', cancel_event_path(@event) %>
+    <%= link_to 'Cancel or Delete', cancel_event_path(@event) %>
   <% end %>
 
 <% end %>

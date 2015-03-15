@@ -1,6 +1,8 @@
-<% title "Cancel ‘#{@event.display_name}’" %>
+<% title "Cancel or Delete ‘#{@event.display_name}’" %>
 
 <%= form_for @event, url: cancel_event_path(@event), method: :patch do |f| %>
+
+  <h2>Cancel</h2>
 
   <p>You may optionally enter in a reason for cancellation.</p>
 
@@ -16,7 +18,14 @@
 
   <%= cancel 'Do Not Cancel' %>
   <%= submit "Cancel #{Configurable.event.titlecase}", class: 'danger' %>
+
 <% end %>
-<%= form_for @event, url: event_path(@event), method: :delete do |f| %>
-    <%= submit "Delete #{Configurable.event.titlecase}", class: 'danger', onClick: "doc" %>
+
+
+<%= form_for @event, url: event_path(@event), method: :delete, html: {style: "margin-top:4em"} do |f| %>
+
+  <h2>Delete</h2>
+
+  <%= submit "Permanently Delete #{Configurable.event.titlecase}", class: 'danger', data: {confirm: "Delete ‘#{@event.display_name(current_user)}’? This cannot be undone."} %>
+
 <% end %>
