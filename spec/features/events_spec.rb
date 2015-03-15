@@ -744,10 +744,9 @@ describe "Events" do
         e = create :event, coordinator: create(:coordinator)
         login_as e.coordinator
         visit event_path e
-        expect(page).not_to have_link 'Cancel'
-        visit cancel_event_path e
-        expect(current_path).not_to eq cancel_event_path e
-        expect(page).to have_content 'Sorry'
+        click_link 'Delete'
+        expect(page).to have_button 'Cancel Event'
+        expect(page).not_to have_button 'Delete Event'
       end
 
       it "does not allow participants to delete an event" do

@@ -21,11 +21,14 @@
 
 <% end %>
 
+<% if can? :destroy, @event %>
 
-<%= form_for @event, url: event_path(@event), method: :delete, html: {style: "margin-top:4em"} do |f| %>
+  <%= form_for @event, url: event_path(@event), method: :delete, html: {style: "margin-top:4em"} do |f| %>
 
-  <h2>Delete</h2>
+    <h2>Delete</h2>
 
-  <%= submit "Permanently Delete #{Configurable.event.titlecase}", class: 'danger', data: {confirm: "Delete ‘#{@event.display_name}’? This cannot be undone."} %>
+    <%= submit "Permanently Delete #{Configurable.event.titlecase}", class: 'danger', data: {confirm: "Delete ‘#{@event.display_name}’? This cannot be undone."} %>
+
+  <% end %>
 
 <% end %>
